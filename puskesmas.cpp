@@ -9,43 +9,62 @@ struct pasien{
 	int id[60];
 	string nama[60];
 	string gender[60];
-	int umur[60];
+	string umur[60];
 	string alamat[60];
 	int count;
 } psn;
 
 struct queue1{
-	int data[60];
+	string data_periksa[60];
 	int awal, akhir;
 }antrean_periksa;
 
 struct queue2{
-	int data[60];
+	string data_obat[60];
 	int awal, akhir;
 }antrean_obat;
 
+void inQueue(string nama){
+	antrean_periksa.data_periksa[antrean_periksa.akhir] = nama;
+	antrean_periksa.akhir++;
+}
 
 void add_pasien(){
-    cout << "No KTP : "; cin >> psn.id[psn.count];
-	cout << "Nama   : "; cin >> psn.nama[psn.count];
-	cout << "Gender : "; cin >> psn.gender[psn.count];
-	cout << "Umur   : "; cin >> psn.umur[psn.count];
-	cout << "Alamat : "; cin >> psn.alamat[psn.count];
-	// antrean_periksa.data[antrean_periksa.akhir]=psn.nama[psn.count];
+	xc::color(10, 0);
+	xc::xy(40,6); cout << "Masukkan Data-Data Pasien : ";
+	xc::color(7, 0);
+    xc::xy(40,8);  cout << "No KTP : "; cin >> psn.id[psn.count];
+	xc::xy(40,9);  cout << "Nama   : "; cin >> psn.nama[psn.count];
+	xc::xy(40,10); cout << "Gender : "; cin >> psn.gender[psn.count];
+	xc::xy(40,11); cout << "Umur   : "; cin >> psn.umur[psn.count];
+	xc::xy(40,12); cout << "Alamat : "; cin >> psn.alamat[psn.count];
+	// antrean_periksa.data_periksa[antrean_periksa.akhir]
+	inQueue(psn.nama[psn.count]);
 	psn.count++;
+}
+
+void input_antrean(){
+	xc::color(10, 0);
+	xc::xy(40,6); cout << "Cari Pasien : ";
+	xc::color(7, 0);
+    xc::xy(40,8);  cout << "Data : "; cin >> antrean_periksa.data_periksa[antrean_periksa.akhir];
+
+	// string nama = psn.nama[psn.count];
+	// antrean_periksa.data[antrean_periksa.akhir]=psn.nama[psn.count];
+	antrean_periksa.akhir++;
 	// antrean_periksa.akhir++;
 }
 
-int kolom[] = {25, 35};
+int kolom[] = {35, 40};
 int baris[] = {5, 25};
-int value = 7;
+int value = 16;
 
 void show_antrean(){
 	system("cls");
 	xc::color(10, 0);
-	xc::xy(25,3); cout << "Antrian Pasien : ";
+	xc::xy(35,3); cout << "Antrian Pasien : ";
 	xc::color(7, 0);
-	string header[] = {"No", "Nama Pasien"};
+	string header[] = {" No", " Nama Pasien"};
 	for(auto r = 0; r < 2; ++r)
 	{
 		xc::xy(kolom[r], baris[0]);
@@ -53,7 +72,7 @@ void show_antrean(){
 	}
 
 	//perulangan yg digunakan untuk menggambar garis mendatar
-	for(auto i = kolom[0]-1; i <= kolom[2] + 51; ++i){
+	for(auto i = kolom[0]-1; i <= kolom[2] + 61; ++i){
 		xc::xy(i, baris[0] - 1);
 		cout << char(196);
 		xc::xy(i, baris[0] + 1);
@@ -142,37 +161,39 @@ void show_antrean(){
 				cout << char(179);
 			}
 		}
-		xc::xy(25, 27);cout << "Selesai";
-		
-	}
 
-	// for (auto i = 0; i < 2; ++i)
-	// {
-	// 	// xc::xy(col[i], isi);
-	// 	// cout << nomer;
-	// 	int nomer = 0;
-	// 	for (int j = kolom[22]+1; j <= kolom[22]-1; ++j)
-	// 	{
-	// 		xc::xy(kolom[22]+1, j);
-	// 		cout << nomer+1;
-	// 		xc::xy(kolom[1], j);
-	// 		cout << psn.nama[nomer];
-	// 		// xc::xy(kolom[2], j);
-	// 		// cout << psn.gender[nomer];
-	// 		// xc::xy(kolom[3], j);
-	// 		// cout << psn.umur[nomer];
-	// 		// xc::xy(kolom[4], j);
-	// 		// cout << psn.alamat[nomer];
-	// 		nomer++;
-	// 	}
-		
-	// }
+		for (auto i = 0; i < antrean_periksa.akhir; ++i)
+		{
+			int nomer = 0;
+			for (int j = baris[0]+2; j <= baris[1]-2; ++j)
+			{
+				if(antrean_periksa.data_periksa[nomer] == ""){
+					xc::xy(kolom[0]+1, j);
+					cout << "";
+				} else {
+					xc::xy(kolom[0]+1, j);
+					cout << nomer+1;
+					xc::xy(kolom[1], j);
+					cout << antrean_periksa.data_periksa[nomer];
+				}
+				nomer++;
+			}
+			
+		}
+		xc::xy(36, 25);cout << "Press Any Key to Continue...";
+	}
 
 	getch();
 }
 
-void proses_antrean(){
-	cout << "Proses";
+void proses_periksa(){
+	cout << "Proses Periksa";
+	getch();
+}
+
+void proses_obat(){
+	cout << "Proses Obat";
+	getch();
 }
 
 
@@ -282,8 +303,6 @@ void show_pasien(){
 				cout << char(179);
 			}
 		}
-		xc::xy(25, 27);cout << "Selesai";
-		
 	}
 	
 	
@@ -298,32 +317,39 @@ void show_pasien(){
 	} */
 
 	
-	for (auto i = 0; i < 5; ++i)
+	for (auto i = 0; i < psn.count; ++i)
 	{
 		// xc::xy(col[i], isi);
 		// cout << nomer;
 		int nomer = 0;
 		for (int j = row[0]+2; j <= row[1]-2; ++j)
 		{
-			xc::xy(col[0]+1, j);
-			cout << nomer+1;
-			xc::xy(col[1], j);
-			cout << psn.nama[nomer];
-			xc::xy(col[2], j);
-			cout << psn.gender[nomer];
-			xc::xy(col[3], j);
-			cout << psn.umur[nomer];
-			xc::xy(col[4], j);
-			cout << psn.alamat[nomer];
+			if(psn.id[nomer] == 0){
+				xc::xy(col[0]+1, j);
+				cout << "";
+			} else {
+				xc::xy(col[0]+1, j);
+				cout << nomer+1;
+				xc::xy(col[1], j);
+				cout << psn.nama[nomer];
+				xc::xy(col[2], j);
+				cout << psn.gender[nomer];
+				xc::xy(col[3], j);
+				cout << psn.umur[nomer];
+				xc::xy(col[4], j);
+				cout << psn.alamat[nomer];
+			}
 			nomer++;
 		}
 		
 	}
+	xc::xy(26, 25);cout << "Press Any Key to Continue...";
+	cout << psn.count;
 	getch();
 }
 
-int colpts[] = {35, 66,};
-int rowpts[] = {5, 7, 12, 14};
+int colpts[] = {35, 73,};
+int rowpts[] = {5, 7, 14, 16};
 
 bool repeat = true;
 
@@ -374,21 +400,26 @@ void show_menu(){
 
 int main(){
 	int pilih;
+	// init();
 	do{
 		show_menu();
-		xc::xy(40,6); cout <<  "+ Manajemen Puskesmas +";
-		xc::xy(40,8); cout <<  "| 1 |    Daftar Pasien";
-		xc::xy(40,9); cout <<  "| 2 |    Lihat Pasien";
-		xc::xy(40,10); cout << "| 3 |    Lihat Antrian";
-		xc::xy(40,11); cout << "| 4 |    Proses Antrian";
-		xc::xy(40,13); cout << "Masukkan Pilihan : ";
-		xc::xy(60,13); cin >> pilih;
+		xc::xy(43,6); cout <<  "+ Manajemen Puskesmas +";
+		xc::xy(40,8); cout <<  "| 1 |  Daftar Pasien";
+		xc::xy(40,9); cout <<  "| 2 |  Lihat Pasien";
+		xc::xy(40,10); cout << "| 3 |  Lihat Antrian";
+		xc::xy(40,11); cout << "| 4 |  Masukkan Antrian";
+		xc::xy(40,12); cout << "| 5 |  Proses Antrian Periksa";
+		xc::xy(40,13); cout << "| 6 |  Proses Antrian Obat";
+		xc::xy(40,15); cout << "Masukkan Pilihan : ";
+		xc::xy(60,15); cin >> pilih;
 		system("cls");
 		switch(pilih){
 			case 1: add_pasien(); break;
 			case 2: show_pasien(); break;
 			case 3: show_antrean(); break;
-			case 4: proses_antrean(); break;
+			case 4: input_antrean(); break;
+			case 5: proses_periksa(); break;
+			case 6: proses_obat(); break;
 		}
 	}
 	while(pilih!=0);
