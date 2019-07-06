@@ -2,31 +2,51 @@
 #include <Windows.h>
 #include <conio.h>
 #include "xcurse.h"
+#define MAX 60
 
 using namespace std;
 
 struct pasien{
-	int id[60];
-	string nama[60];
-	string gender[60];
-	string umur[60];
-	string alamat[60];
+	int id[MAX];
+	string nama[MAX];
+	string gender[MAX];
+	string umur[MAX];
+	string alamat[MAX];
 	int count;
 } psn;
 
 struct queue1{
-	string data_periksa[60];
+	string data_periksa[MAX];
 	int awal, akhir;
 }antrean_periksa;
 
 struct queue2{
-	string data_obat[60];
+	string data_obat[MAX];
 	int awal, akhir;
 }antrean_obat;
 
-void inQueue(string nama){
+// bool full_periksa(){
+// 	if(antrean_periksa.akhir == MAX-1)
+// 		return true;
+// 	else
+// 		return false;
+// }
+
+// bool empty_periksa(){
+// 	if(antrean_periksa.akhir == -1)
+// 		return true;
+// 	else
+// 		return false;
+// }
+
+void inQueue_periksa(string nama){
 	antrean_periksa.data_periksa[antrean_periksa.akhir] = nama;
 	antrean_periksa.akhir++;
+}
+
+void inQueue_obat(string nama){
+	antrean_obat.data_obat[antrean_obat.akhir] = nama;
+	antrean_obat.akhir++;
 }
 
 void add_pasien(){
@@ -39,7 +59,7 @@ void add_pasien(){
 	xc::xy(40,11); cout << "Umur   : "; cin >> psn.umur[psn.count];
 	xc::xy(40,12); cout << "Alamat : "; cin >> psn.alamat[psn.count];
 	// antrean_periksa.data_periksa[antrean_periksa.akhir]
-	inQueue(psn.nama[psn.count]);
+	inQueue_periksa(psn.nama[psn.count]);
 	psn.count++;
 }
 
@@ -55,11 +75,41 @@ void input_antrean(){
 	// antrean_periksa.akhir++;
 }
 
+void proses_periksa(){
+	int i;
+	xc::xy(30,8);cout << "Pasien dengan Nama ";
+	xc::color(10, 0);
+	cout << "\"" << antrean_periksa.data_periksa[antrean_periksa.awal] << "\"";
+	xc::color(7, 0);
+	cout << " dipersilakan masuk ke ruang periksa";
+	inQueue_obat(antrean_periksa.data_periksa[antrean_periksa.awal]);
+	for (int i = antrean_periksa.awal; i < antrean_periksa.akhir; ++i){
+		antrean_periksa.data_periksa[i] = antrean_periksa.data_periksa[i+1];
+	}
+	antrean_periksa.akhir--;
+	// cout << "Proses Antrian";
+	getch();
+}
+
+void proses_obat(){
+	int i;
+	xc::xy(30,8);cout << "Pasien dengan Nama ";
+	xc::color(10, 0);
+	cout << "\"" << antrean_obat.data_obat[antrean_obat.awal] << "\"";
+	xc::color(7, 0);
+	cout << " dipersilakan masuk ke ruang ambil obat";
+	for (int i = antrean_obat.awal; i < antrean_obat.akhir; ++i){
+		antrean_obat.data_obat[i] = antrean_obat.data_obat[i+1];
+	}
+	antrean_obat.akhir--;
+	getch();
+}
+
 int kolom[] = {35, 40};
 int baris[] = {5, 25};
 int value = 16;
 
-void show_antrean(){
+void show_antrean_periksa(){
 	system("cls");
 	xc::color(10, 0);
 	xc::xy(35,3); cout << "Antrian Pasien : ";
@@ -182,20 +232,134 @@ void show_antrean(){
 		}
 		xc::xy(36, 25);cout << "Press Any Key to Continue...";
 	}
-
 	getch();
 }
 
-void proses_periksa(){
-	cout << "Proses Periksa";
+void show_antrean_obat(){
+	system("cls");
+	xc::color(10, 0);
+	xc::xy(35,3); cout << "Antrian Ambil Obat : ";
+	xc::color(7, 0);
+	string header[] = {" No", " Nama Pasien"};
+	for(auto r = 0; r < 2; ++r)
+	{
+		xc::xy(kolom[r], baris[0]);
+		cout << header[r];
+	}
+
+	//perulangan yg digunakan untuk menggambar garis mendatar
+	for(auto i = kolom[0]-1; i <= kolom[2] + 61; ++i){
+		xc::xy(i, baris[0] - 1);
+		cout << char(196);
+		xc::xy(i, baris[0] + 1);
+		cout << char(196);
+		xc::xy(i, baris[1] - 1);
+		cout << char(196);
+		xc::xy(i, baris[1] + 1);
+		cout << char(196);
+		
+
+		//perulangan untuk menggambar garis ke bawah di bagian tengah
+		for(auto j = baris[0]-1; j <= baris[1] - 1; ++j){
+			if(j==4){
+				xc::xy(kolom[1]-1, j);
+				cout << char(194);
+				// xc::xy(kolom[2]-1, j);
+				// cout << char(194);
+				// xc::xy(kolom[3]-1, j);
+				// cout << char(194);
+				// xc::xy(kolom[4]-1, j);
+				// cout << char(194);
+			}
+			else if(j==6){
+				xc::xy(kolom[1]-1, j);
+				cout << char(197);
+				// xc::xy(kolom[2]-1, j);
+				// cout << char(197);
+				// xc::xy(kolom[3]-1, j);
+				// cout << char(197);
+				// xc::xy(kolom[4]-1, j);
+				// cout << char(197);
+			}
+			else if(j==24){
+				xc::xy(kolom[1]-1, j);
+				cout << char(193);
+				// xc::xy(kolom[2]-1, j);
+				// cout << char(193);
+				// xc::xy(kolom[3]-1, j);
+				// cout << char(193);
+				// xc::xy(kolom[4]-1, j);
+				// cout << char(193);
+			}
+			else{
+				xc::xy(kolom[1]-1, j);
+				cout << char(179);
+				// xc::xy(kolom[2]-1, j);
+				// cout << char(179);
+				// xc::xy(kolom[3]-1, j);
+				// cout << char(179);
+				// xc::xy(kolom[4]-1, j);
+				// cout << char(179);
+			}
+		}
+
+		//perulangan untuk menggambar garis ke bawah 
+		//di bagian sisi kanan dan kiri
+		for(auto k = baris[0]-1; k <= baris[1] + 1; ++k){
+			if(k==4){
+				xc::xy(kolom[0]-1, k);
+				cout << char(218);
+				xc::xy(kolom[4]+50, k);
+				cout << char(191);
+			}
+			else if(k==6){
+				xc::xy(kolom[0]-1, k);
+				cout << char(195);
+				xc::xy(kolom[4]+50, k);
+				cout << char(180);
+			}
+			else if(k==24){
+				xc::xy(kolom[0]-1, k);
+				cout << char(195);
+				xc::xy(kolom[4]+50, k);
+				cout << char(180);
+			}
+			else if(k==26){
+				xc::xy(kolom[0]-1, k);
+				cout << char(192);
+				xc::xy(kolom[4]+50, k);
+				cout << char(217);
+			}
+			else{
+				xc::xy(kolom[0]-1, k);
+				cout << char(179);
+				xc::xy(kolom[4]+50, k);
+				cout << char(179);
+			}
+		}
+
+		for (auto i = 0; i < antrean_obat.akhir; ++i)
+		{
+			int nomer = 0;
+			for (int j = baris[0]+2; j <= baris[1]-2; ++j)
+			{
+				if(antrean_obat.data_obat[nomer] == ""){
+					xc::xy(kolom[0]+1, j);
+					cout << "";
+				} else {
+					xc::xy(kolom[0]+1, j);
+					cout << nomer+1;
+					xc::xy(kolom[1], j);
+					cout << antrean_obat.data_obat[nomer];
+				}
+				nomer++;
+			}
+			
+		}
+		xc::xy(36, 25);cout << "Press Any Key to Continue...";
+	}
 	getch();
 }
-
-void proses_obat(){
-	cout << "Proses Obat";
-	getch();
-}
-
 
 int col[] = {25, 31, 51, 60, 72};
 int row[] = {5, 25};
@@ -344,12 +508,11 @@ void show_pasien(){
 		
 	}
 	xc::xy(26, 25);cout << "Press Any Key to Continue...";
-	cout << psn.count;
 	getch();
 }
 
 int colpts[] = {35, 73,};
-int rowpts[] = {5, 7, 14, 16};
+int rowpts[] = {5, 7, 16, 18};
 
 bool repeat = true;
 
@@ -406,20 +569,24 @@ int main(){
 		xc::xy(43,6); cout <<  "+ Manajemen Puskesmas +";
 		xc::xy(40,8); cout <<  "| 1 |  Daftar Pasien";
 		xc::xy(40,9); cout <<  "| 2 |  Lihat Pasien";
-		xc::xy(40,10); cout << "| 3 |  Lihat Antrian";
-		xc::xy(40,11); cout << "| 4 |  Masukkan Antrian";
-		xc::xy(40,12); cout << "| 5 |  Proses Antrian Periksa";
-		xc::xy(40,13); cout << "| 6 |  Proses Antrian Obat";
-		xc::xy(40,15); cout << "Masukkan Pilihan : ";
-		xc::xy(60,15); cin >> pilih;
+		xc::xy(40,10); cout << "| 3 |  Lihat Antrian Periksa";
+		xc::xy(40,11); cout << "| 4 |  Lihat Antrian Obat";
+		xc::xy(40,12); cout << "| 5 |  Masukkan Antrian";
+		xc::xy(40,13); cout << "| 6 |  Proses Antrian Periksa";
+		xc::xy(40,14); cout << "| 7 |  Proses Antrian Obat";
+		xc::xy(40,15); cout << "| 8 |  Keluar";
+		xc::xy(40,17); cout << "Masukkan Pilihan : ";
+		xc::xy(60,17); cin >> pilih;
 		system("cls");
 		switch(pilih){
 			case 1: add_pasien(); break;
 			case 2: show_pasien(); break;
-			case 3: show_antrean(); break;
-			case 4: input_antrean(); break;
-			case 5: proses_periksa(); break;
-			case 6: proses_obat(); break;
+			case 3: show_antrean_periksa(); break;
+			case 4: show_antrean_obat(); break;
+			case 5: input_antrean(); break;
+			case 6: proses_periksa(); break;
+			case 7: proses_obat(); break;
+			case 8: exit(0); break;
 		}
 	}
 	while(pilih!=0);
