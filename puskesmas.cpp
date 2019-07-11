@@ -64,15 +64,37 @@ void add_pasien(){
 }
 
 void input_antrean(){
+	int id;
+	int tanda = -1;
+	string temp;
 	xc::color(10, 0);
 	xc::xy(40,6); cout << "Cari Pasien : ";
 	xc::color(7, 0);
-    xc::xy(40,8);  cout << "Data : "; cin >> antrean_periksa.data_periksa[antrean_periksa.akhir];
+    xc::xy(40,8);  cout << "Masukkan Id : "; cin >> id;
 
-	// string nama = psn.nama[psn.count];
-	// antrean_periksa.data[antrean_periksa.akhir]=psn.nama[psn.count];
-	antrean_periksa.akhir++;
-	// antrean_periksa.akhir++;
+    for(int i = 0; i < psn.count; ++i){
+		if(id==psn.id[i]){
+			tanda=i;
+			break;
+		}
+	}
+	
+	if(tanda!=-1){
+		system("cls");
+		xc::xy(30,8); cout << "Berhasil Menambahkan Pasien ";
+		xc::color(10, 0);
+		cout << "\"" << psn.nama[tanda] << "\"";
+		xc::color(7, 0);
+		cout << " ke antrean periksa";
+		temp = psn.nama[tanda];
+		inQueue_periksa(temp);
+		getch();
+	} else {
+		system("cls");
+		xc::xy(45,8); cout << "Pasien tidak terdaftar!!";
+	    xc::xy(40,9); cout << "Silahkan Mendaftar terlebih dahulu";
+	    getch();
+	}
 }
 
 void proses_periksa(){
@@ -138,42 +160,18 @@ void show_antrean_periksa(){
 			if(j==4){
 				xc::xy(kolom[1]-1, j);
 				cout << char(194);
-				// xc::xy(kolom[2]-1, j);
-				// cout << char(194);
-				// xc::xy(kolom[3]-1, j);
-				// cout << char(194);
-				// xc::xy(kolom[4]-1, j);
-				// cout << char(194);
 			}
 			else if(j==6){
 				xc::xy(kolom[1]-1, j);
 				cout << char(197);
-				// xc::xy(kolom[2]-1, j);
-				// cout << char(197);
-				// xc::xy(kolom[3]-1, j);
-				// cout << char(197);
-				// xc::xy(kolom[4]-1, j);
-				// cout << char(197);
 			}
 			else if(j==24){
 				xc::xy(kolom[1]-1, j);
 				cout << char(193);
-				// xc::xy(kolom[2]-1, j);
-				// cout << char(193);
-				// xc::xy(kolom[3]-1, j);
-				// cout << char(193);
-				// xc::xy(kolom[4]-1, j);
-				// cout << char(193);
 			}
 			else{
 				xc::xy(kolom[1]-1, j);
 				cout << char(179);
-				// xc::xy(kolom[2]-1, j);
-				// cout << char(179);
-				// xc::xy(kolom[3]-1, j);
-				// cout << char(179);
-				// xc::xy(kolom[4]-1, j);
-				// cout << char(179);
 			}
 		}
 
@@ -264,42 +262,18 @@ void show_antrean_obat(){
 			if(j==4){
 				xc::xy(kolom[1]-1, j);
 				cout << char(194);
-				// xc::xy(kolom[2]-1, j);
-				// cout << char(194);
-				// xc::xy(kolom[3]-1, j);
-				// cout << char(194);
-				// xc::xy(kolom[4]-1, j);
-				// cout << char(194);
 			}
 			else if(j==6){
 				xc::xy(kolom[1]-1, j);
 				cout << char(197);
-				// xc::xy(kolom[2]-1, j);
-				// cout << char(197);
-				// xc::xy(kolom[3]-1, j);
-				// cout << char(197);
-				// xc::xy(kolom[4]-1, j);
-				// cout << char(197);
 			}
 			else if(j==24){
 				xc::xy(kolom[1]-1, j);
 				cout << char(193);
-				// xc::xy(kolom[2]-1, j);
-				// cout << char(193);
-				// xc::xy(kolom[3]-1, j);
-				// cout << char(193);
-				// xc::xy(kolom[4]-1, j);
-				// cout << char(193);
 			}
 			else{
 				xc::xy(kolom[1]-1, j);
 				cout << char(179);
-				// xc::xy(kolom[2]-1, j);
-				// cout << char(179);
-				// xc::xy(kolom[3]-1, j);
-				// cout << char(179);
-				// xc::xy(kolom[4]-1, j);
-				// cout << char(179);
 			}
 		}
 
@@ -468,19 +442,7 @@ void show_pasien(){
 			}
 		}
 	}
-	
-	
 
-	/*for (int i = 0; i < psn.count; ++i)
-	{
-		cout << "No KTP : " << psn.id[i] << endl;
-		cout << "Nama   : " << psn.nama[i] << endl;
-		cout << "Gender : " << psn.gender[i] << endl;
-		cout << "Umur   : " << psn.umur[i] << endl;
-		cout << "Alamat : " << psn.alamat[i] << endl;
-	} */
-
-	
 	for (auto i = 0; i < psn.count; ++i)
 	{
 		// xc::xy(col[i], isi);
@@ -590,8 +552,5 @@ int main(){
 		}
 	}
 	while(pilih!=0);
-	
-	// show_pasien();
-
 	return 0;
 }
